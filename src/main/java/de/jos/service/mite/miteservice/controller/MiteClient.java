@@ -20,7 +20,7 @@ import java.util.List;
 public class MiteClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(MiteClient.class);
 
-    private static final String MITE_BASE_URL = "https://exozet.mite.yo.lk/";
+    private String miteBaseUrl = "https://exozet.mite.yo.lk/";
 
     private String mtr3ID = "2351287";
     private String developmentID = "253445";
@@ -34,7 +34,7 @@ public class MiteClient {
 
     @GetMapping("/newEntry")
     public MiteServiceReply createNewEntry(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        String url = MITE_BASE_URL + "time_entries.json?api_key=" + miteRequestAttributes.getApiKey();
+        String url = miteBaseUrl + "time_entries.json?api_key=" + miteRequestAttributes.getApiKey();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -53,7 +53,7 @@ public class MiteClient {
     @GetMapping("/projects")
     public MiteServiceReply getAvailableProjectsByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
         LOGGER.info("projectResponse request for name: {}", miteRequestAttributes.getSearchParam());
-        String url = MITE_BASE_URL + "projects.json?api_key=" + miteRequestAttributes.getApiKey() + "&name=" + miteRequestAttributes.getSearchParam();
+        String url = miteBaseUrl + "projects.json?api_key=" + miteRequestAttributes.getApiKey() + "&name=" + miteRequestAttributes.getSearchParam();
         ProjectResponse[] projects;
 
         try {
@@ -75,7 +75,7 @@ public class MiteClient {
 
     @GetMapping("/services")
     public MiteServiceReply getAvailableServicesByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        String url = MITE_BASE_URL + "services.json?api_key=" + miteRequestAttributes.getApiKey() + "&name=" + miteRequestAttributes.getSearchParam();
+        String url = miteBaseUrl + "services.json?api_key=" + miteRequestAttributes.getApiKey() + "&name=" + miteRequestAttributes.getSearchParam();
         ServiceResponse[] services;
 
         try {
@@ -93,7 +93,7 @@ public class MiteClient {
 
     @GetMapping("/verifyApiKey")
     public MiteServiceReply verifyApiKey(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        String url = MITE_BASE_URL + "myself.json?api_key=" + miteRequestAttributes.getApiKey();
+        String url = miteBaseUrl + "myself.json?api_key=" + miteRequestAttributes.getApiKey();
         try {
             restTemplate.getForObject(url, Object.class);
             return new MiteServiceReply(true);

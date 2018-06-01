@@ -2,7 +2,6 @@ package de.jos.service.mite.miteservice.model;
 
 public class MiteServiceReply {
     private boolean success;
-    private String message;
     private ServiceResponse.Service[] services;
     private ProjectResponse.Project[] projects;
 
@@ -13,20 +12,18 @@ public class MiteServiceReply {
         this.success = success;
     }
 
+    public MiteServiceReply(boolean success, ServiceResponse.Service[] services, ProjectResponse.Project[] projects) {
+        this.success = success;
+        this.services = services;
+        this.projects = projects;
+    }
+
     public boolean isSuccess() {
         return success;
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public ServiceResponse.Service[] getServices() {
