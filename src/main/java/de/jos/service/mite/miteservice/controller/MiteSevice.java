@@ -24,76 +24,39 @@ public class MiteSevice {
     @Autowired
     private MiteClient miteClient;
 
-    // private String mtr3ID = "2351287";
-    // private String developmentID = "253445";
-
     @GetMapping("/newEntry")
     public MiteServiceReply createNewEntry(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
         MiteRequest miteRequest = getMiteRequest("time_entries.json", miteRequestAttributes);
 
-        try {
-            miteClient.createNewEntry(miteRequest,
-                    new MiteEntry(miteRequestAttributes.getDuration(),
-                            miteRequestAttributes.getComment(),
-                            miteRequestAttributes.getProjectId(),
-                            miteRequestAttributes.getServiceId()));
-            return new MiteServiceReply(true);
-        } catch (Exception e) {
-            LOGGER.error("Failed to execute new-Command: {}", e.getMessage());
-            return new MiteServiceReply(false);
-        }
+        return miteClient.createNewEntry(miteRequest,
+                new MiteEntry(miteRequestAttributes.getDuration(),
+                        miteRequestAttributes.getComment(),
+                        miteRequestAttributes.getProjectId(),
+                        miteRequestAttributes.getServiceId()));
     }
 
     @GetMapping("/projects")
     public MiteServiceReply getAvailableProjectsByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        LOGGER.info("projectResponse request for name: {}", miteRequestAttributes.getSearchParam());
-        String url = miteBaseUrl + "projects.json?api_key=" + miteRequestAttributes.getApiKey() + "&name=" + miteRequestAttributes.getSearchParam();
-        ProjectResponse[] projects;
+        MiteRequest miteRequest = getMiteRequest("projects.json", miteRequestAttributes);
+        LOGGER.info("Project request for name: {}", miteRequestAttributes.getSearchParam());
 
-        try {
-            projects = restTemplate.getForObject(url, ProjectResponse[].class);
-            System.out.println("projects: " + projects);
-            MiteServiceReply miteServiceReply = new MiteServiceReply(true);
-            List<ProjectResponse.Project> projectList = new ArrayList<>();
-            Arrays.asList(projects).forEach(project -> {
-                projectList.add(project.getProject());
-                System.out.println("project: " + project.getProject().getName());
-            });
-            miteServiceReply.setProjects(projectList.toArray(new ProjectResponse.Project[projectList.size()]));
-            return miteServiceReply;
-        } catch (Exception e) {
-            LOGGER.error("Failed to execute project-Command: {}", e.getMessage());
-            return new MiteServiceReply(false);
-        }
+        return miteClient.getProjects(miteRequest);
     }
 
     @GetMapping("/services")
     public MiteServiceReply getAvailableServicesByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        String url = miteBaseUrl + "services.json?api_key=" + miteRequestAttributes.getApiKey() + "&name=" + miteRequestAttributes.getSearchParam();
-        ServiceResponse[] services;
+        MiteRequest miteRequest = getMiteRequest("services.json", miteRequestAttributes);
+        LOGGER.info("Service request for name: {}", miteRequestAttributes.getSearchParam());
 
-        try {
-            services = restTemplate.getForObject(url, ServiceResponse[].class);
-            MiteServiceReply miteServiceReply = new MiteServiceReply(true);
-            List<ServiceResponse.Service> serviceList = new ArrayList<>();
-            Arrays.asList(services).forEach(service -> serviceList.add(service.getService()));
-            miteServiceReply.setServices(serviceList.toArray(new ServiceResponse.Service[serviceList.size()]));
-            return miteServiceReply;
-        } catch (Exception e) {
-            LOGGER.error("Failed to execute service-Command: {}", e.getMessage());
-            return new MiteServiceReply(false);
-        }
+        return miteClient.getServices(miteRequest);
     }
 
     @GetMapping("/verifyApiKey")
     public MiteServiceReply verifyApiKey(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        String url = miteBaseUrl + "myself.json?api_key=" + miteRequestAttributes.getApiKey();
-        try {
-            restTemplate.getForObject(url, Object.class);
-            return new MiteServiceReply(true);
-        } catch (Exception e) {
-            return new MiteServiceReply(false);
-        }
+        MiteRequest miteRequest = getMiteRequest("myself.json", miteRequestAttributes);
+        LOGGER.info("Verify request", miteRequestAttributes.getSearchParam());
+
+        return miteClient.verify(miteRequest);
     }
 
     private MiteRequest getMiteRequest(String path, MiteRequestAttributes miteRequestAttributes) {
