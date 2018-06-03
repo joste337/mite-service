@@ -1,2 +1,5 @@
 server:
   port: 8700
+
+mite:
+  host: exozet.mite.yo.lk
