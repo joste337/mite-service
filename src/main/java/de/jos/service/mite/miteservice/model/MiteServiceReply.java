@@ -1,5 +1,7 @@
 package de.jos.service.mite.miteservice.model;
 
+import java.util.Arrays;
+
 public class MiteServiceReply {
     private boolean success;
     private ServiceResponse.Service[] services;
@@ -40,5 +42,10 @@ public class MiteServiceReply {
 
     public void setProjects(ProjectResponse.Project[] projects) {
         this.projects = projects;
+    }
+
+    @Override
+    public String toString() {
+        return "success: " + success + "\nservices: " + Arrays.toString(services) + "\nprojects: " + Arrays.toString(projects);
     }
 }

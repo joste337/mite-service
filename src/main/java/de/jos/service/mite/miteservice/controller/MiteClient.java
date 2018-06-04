@@ -5,6 +5,8 @@ import de.jos.service.mite.miteservice.model.MiteServiceReply;
 import de.jos.service.mite.miteservice.model.ProjectResponse;
 import de.jos.service.mite.miteservice.model.ServiceResponse;
 import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -18,7 +20,9 @@ import java.util.List;
 
 @Component
 public class MiteClient {
-    @Value("&{mite.host}")
+    private static final Logger LOGGER = LoggerFactory.getLogger(MiteSevice.class);
+
+    @Value("${mite.host}")
     private String miteHost;
     private RestTemplate restTemplate;
 
@@ -36,6 +40,7 @@ public class MiteClient {
             restTemplate.postForObject(url, entity, String.class);
             return new MiteServiceReply(true);
         } catch (Exception e) {
+            LOGGER.info("Not Returning miteServiceReply: {}", e.getMessage());
             return new MiteServiceReply(false);
         }
     }
@@ -52,8 +57,10 @@ public class MiteClient {
                 projectList.add(project.getProject());
             });
             miteServiceReply.setProjects(projectList.toArray(new ProjectResponse.Project[projectList.size()]));
+            LOGGER.info("Returning miteServiceReply: {}", miteServiceReply.toString());
             return miteServiceReply;
         } catch (Exception e) {
+            LOGGER.info("Not Returning miteServiceReply: {}", e.getMessage());
             return new MiteServiceReply(false);
         }
     }
@@ -70,8 +77,10 @@ public class MiteClient {
                 serviceList.add(service.getService());
             });
             miteServiceReply.setServices(serviceList.toArray(new ServiceResponse.Service[serviceList.size()]));
+            LOGGER.info("Returning miteServiceReply: {}", miteServiceReply.toString());
             return miteServiceReply;
         } catch (Exception e) {
+            LOGGER.info("Not Returning miteServiceReply: {}", e.getMessage(), e);
             return new MiteServiceReply(false);
         }
     }
@@ -97,7 +106,8 @@ public class MiteClient {
         try {
             return uriBuilder.build().toString();
         } catch (URISyntaxException e) {
-            return "UriSyntaxException";
+            LOGGER.error(e.getMessage());
+            return "";
         }
     }
 }

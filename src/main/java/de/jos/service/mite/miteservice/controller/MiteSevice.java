@@ -5,17 +5,8 @@ import de.jos.service.mite.miteservice.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 public class MiteSevice {
@@ -27,6 +18,7 @@ public class MiteSevice {
     @GetMapping("/newEntry")
     public MiteServiceReply createNewEntry(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
         MiteRequest miteRequest = getMiteRequest("time_entries.json", miteRequestAttributes);
+        LOGGER.info("New request");
 
         return miteClient.createNewEntry(miteRequest,
                 new MiteEntry(miteRequestAttributes.getDuration(),
@@ -54,7 +46,7 @@ public class MiteSevice {
     @GetMapping("/verifyApiKey")
     public MiteServiceReply verifyApiKey(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
         MiteRequest miteRequest = getMiteRequest("myself.json", miteRequestAttributes);
-        LOGGER.info("Verify request", miteRequestAttributes.getSearchParam());
+        LOGGER.info("Verify request");
 
         return miteClient.verify(miteRequest);
     }
