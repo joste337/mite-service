@@ -9,8 +9,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class MiteSevice {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MiteSevice.class);
+public class MiteService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MiteService.class);
 
     @Autowired
     private MiteClient miteClient;

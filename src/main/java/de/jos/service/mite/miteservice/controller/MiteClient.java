@@ -20,7 +20,7 @@ import java.util.List;
 
 @Component
 public class MiteClient {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MiteSevice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MiteService.class);
 
     @Value("${mite.host}")
     private String miteHost;
@@ -36,64 +36,46 @@ public class MiteClient {
     public MiteServiceReply createNewEntry(MiteRequest miteRequest, MiteEntry miteEntry) {
         HttpEntity<MiteEntry> entity = new HttpEntity<>(miteEntry, miteRequest.getHeaders());
         String url = buildUrl(miteRequest);
-        try {
-            restTemplate.postForObject(url, entity, String.class);
-            return new MiteServiceReply(true);
-        } catch (Exception e) {
-            LOGGER.info("Not Returning miteServiceReply: {}", e.getMessage());
-            return new MiteServiceReply(false);
-        }
+
+        restTemplate.postForObject(url, entity, String.class);
+        return new MiteServiceReply(true);
     }
 
     public MiteServiceReply getProjects(MiteRequest miteRequest) {
         String url = buildUrl(miteRequest);
         ProjectResponse[] projects;
 
-        try {
-            projects = restTemplate.getForObject(url, ProjectResponse[].class);
-            MiteServiceReply miteServiceReply = new MiteServiceReply(true);
-            List<ProjectResponse.Project> projectList = new ArrayList<>();
-            Arrays.asList(projects).forEach(project -> {
-                projectList.add(project.getProject());
-            });
-            miteServiceReply.setProjects(projectList.toArray(new ProjectResponse.Project[projectList.size()]));
-            LOGGER.info("Returning miteServiceReply: {}", miteServiceReply.toString());
-            return miteServiceReply;
-        } catch (Exception e) {
-            LOGGER.info("Not Returning miteServiceReply: {}", e.getMessage());
-            return new MiteServiceReply(false);
-        }
+        projects = restTemplate.getForObject(url, ProjectResponse[].class);
+        MiteServiceReply miteServiceReply = new MiteServiceReply(true);
+        List<ProjectResponse.Project> projectList = new ArrayList<>();
+        Arrays.asList(projects).forEach(project -> {
+            projectList.add(project.getProject());
+        });
+        miteServiceReply.setProjects(projectList.toArray(new ProjectResponse.Project[projectList.size()]));
+        LOGGER.info("Returning miteServiceReply: {}", miteServiceReply.toString());
+        return miteServiceReply;
     }
 
     public MiteServiceReply getServices(MiteRequest miteRequest) {
         String url = buildUrl(miteRequest);
         ServiceResponse[] services;
 
-        try {
-            services = restTemplate.getForObject(url, ServiceResponse[].class);
-            MiteServiceReply miteServiceReply = new MiteServiceReply(true);
-            List<ServiceResponse.Service> serviceList = new ArrayList<>();
-            Arrays.asList(services).forEach(service -> {
-                serviceList.add(service.getService());
-            });
-            miteServiceReply.setServices(serviceList.toArray(new ServiceResponse.Service[serviceList.size()]));
-            LOGGER.info("Returning miteServiceReply: {}", miteServiceReply.toString());
-            return miteServiceReply;
-        } catch (Exception e) {
-            LOGGER.info("Not Returning miteServiceReply: {}", e.getMessage(), e);
-            return new MiteServiceReply(false);
-        }
+        services = restTemplate.getForObject(url, ServiceResponse[].class);
+        MiteServiceReply miteServiceReply = new MiteServiceReply(true);
+        List<ServiceResponse.Service> serviceList = new ArrayList<>();
+        Arrays.asList(services).forEach(service -> {
+            serviceList.add(service.getService());
+        });
+        miteServiceReply.setServices(serviceList.toArray(new ServiceResponse.Service[serviceList.size()]));
+        LOGGER.info("Returning miteServiceReply: {}", miteServiceReply.toString());
+        return miteServiceReply;
     }
 
     public MiteServiceReply verify(MiteRequest miteRequest) {
         String url = buildUrl(miteRequest);
 
-        try {
-            restTemplate.getForObject(url, Object.class);
-            return new MiteServiceReply(true);
-        } catch (Exception e) {
-            return new MiteServiceReply(false);
-        }
+        restTemplate.getForObject(url, Object.class);
+        return new MiteServiceReply(true);
     }
 
     private String buildUrl(MiteRequest miteRequest) {

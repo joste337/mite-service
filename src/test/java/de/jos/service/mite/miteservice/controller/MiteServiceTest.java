@@ -18,20 +18,20 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MiteSeviceTest {
+public class MiteServiceTest {
     @Autowired
-    private MiteSevice miteSevice;
+    private MiteService miteService;
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
 
     @Before
     public void setUp() {
-        ReflectionTestUtils.setField(miteSevice, "miteBaseUrl", "http://localhost:" + wireMockRule.port() + "/");
+        ReflectionTestUtils.setField(miteService, "miteBaseUrl", "http://localhost:" + wireMockRule.port() + "/");
     }
 
     @Test
     public void shouldReturnSuccessForNewEntry() {
-        MiteServiceReply miteServiceReply = miteSevice.createNewEntry(aMiteRequestAttribute());
+        MiteServiceReply miteServiceReply = miteService.createNewEntry(aMiteRequestAttribute());
 
         assertThat(miteServiceReply.isSuccess()).isTrue();
     }
