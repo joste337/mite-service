@@ -1,6 +1,10 @@
 package de.jos.service.mite.miteservice.controller;
 
 
+import de.jos.service.mite.miteservice.manager.EntryManager;
+import de.jos.service.mite.miteservice.manager.ProjectManager;
+import de.jos.service.mite.miteservice.manager.ServiceManager;
+import de.jos.service.mite.miteservice.manager.VerifyManager;
 import de.jos.service.mite.miteservice.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,45 +17,47 @@ public class MiteService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MiteService.class);
 
     @Autowired
-    private MiteClient miteClient;
+    private ServiceManager serviceManager;
+    @Autowired
+    private ProjectManager projectManager;
+    @Autowired
+    private VerifyManager verifyManager;
+    @Autowired
+    private EntryManager entryManager;
 
     @GetMapping("/newEntry")
     public MiteServiceReply createNewEntry(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        MiteRequest miteRequest = getMiteRequest("time_entries.json", miteRequestAttributes);
+        MiteRequest miteRequest = createMiteRequestFromAttributes("time_entries.json", miteRequestAttributes);
         LOGGER.info("New request");
 
-        return miteClient.createNewEntry(miteRequest,
-                new MiteEntry(miteRequestAttributes.getDuration(),
-                        miteRequestAttributes.getComment(),
-                        miteRequestAttributes.getProjectId(),
-                        miteRequestAttributes.getServiceId()));
+        return entryManager.createNewEntry(miteRequest, entryManager.parseMiteRequestAttributesToMiteEntry(miteRequestAttributes));
     }
 
-    @GetMapping("/projects")
+    @GetMapping("/project")
     public MiteServiceReply getAvailableProjectsByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        MiteRequest miteRequest = getMiteRequest("projects.json", miteRequestAttributes);
+        MiteRequest miteRequest = createMiteRequestFromAttributes("projects.json", miteRequestAttributes);
         LOGGER.info("Project request for name: {}", miteRequestAttributes.getSearchParam());
 
-        return miteClient.getProjects(miteRequest);
+        return projectManager.getProjects(miteRequest);
     }
 
-    @GetMapping("/services")
+    @GetMapping("/service")
     public MiteServiceReply getAvailableServicesByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        MiteRequest miteRequest = getMiteRequest("services.json", miteRequestAttributes);
+        MiteRequest miteRequest = createMiteRequestFromAttributes("services.json", miteRequestAttributes);
         LOGGER.info("Service request for name: {}", miteRequestAttributes.getSearchParam());
 
-        return miteClient.getServices(miteRequest);
+        return serviceManager.getServices(miteRequest);
     }
 
     @GetMapping("/verifyApiKey")
     public MiteServiceReply verifyApiKey(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
-        MiteRequest miteRequest = getMiteRequest("myself.json", miteRequestAttributes);
+        MiteRequest miteRequest = createMiteRequestFromAttributes("myself.json", miteRequestAttributes);
         LOGGER.info("Verify request");
 
-        return miteClient.verify(miteRequest);
+        return verifyManager.verify(miteRequest);
     }
 
-    private MiteRequest getMiteRequest(String path, MiteRequestAttributes miteRequestAttributes) {
+    private MiteRequest createMiteRequestFromAttributes(String path, MiteRequestAttributes miteRequestAttributes) {
         MiteRequest miteRequest = new MiteRequest();
         miteRequest.buildRequest(path, miteRequestAttributes);
         return miteRequest;

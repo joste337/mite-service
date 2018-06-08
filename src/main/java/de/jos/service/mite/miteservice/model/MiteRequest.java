@@ -1,4 +1,4 @@
-package de.jos.service.mite.miteservice.controller;
+package de.jos.service.mite.miteservice.model;
 
 import de.jos.service.mite.miteservice.model.MiteRequestAttributes;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +15,7 @@ public class MiteRequest {
     public void buildRequest(String path, MiteRequestAttributes miteRequestAttributes) {
         this.path = path;
         this.apiKey = miteRequestAttributes.getApiKey();
-        this.searchParam = Optional.of(miteRequestAttributes.getSearchParam());
+        this.searchParam = Optional.ofNullable(miteRequestAttributes.getSearchParam());
         this.headers = new HttpHeaders();
         this.headers.setContentType(MediaType.APPLICATION_JSON);
     }
