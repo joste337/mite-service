@@ -3,8 +3,8 @@ package de.jos.service.mite.miteservice.manager;
 import de.jos.service.mite.miteservice.controller.MiteClient;
 import de.jos.service.mite.miteservice.model.MiteRequest;
 import de.jos.service.mite.miteservice.model.MiteServiceReply;
-import de.jos.service.mite.miteservice.model.ProjectResponse;
-import de.jos.service.mite.miteservice.model.ServiceResponse;
+import de.jos.service.mite.miteservice.responseModel.ProjectResponse;
+import de.jos.service.mite.miteservice.responseModel.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

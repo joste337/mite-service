@@ -33,6 +33,14 @@ public class MiteService {
         return entryManager.createNewEntry(miteRequest, entryManager.parseMiteRequestAttributesToMiteEntry(miteRequestAttributes));
     }
 
+    @GetMapping("/pastEntry")
+    public MiteServiceReply getPastEntries(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
+        MiteRequest miteRequest = createMiteRequestFromAttributes("time_entries.json", miteRequestAttributes);
+        LOGGER.info("Past entries request");
+
+        return entryManager.getPastEntries(miteRequest);
+    }
+
     @GetMapping("/project")
     public MiteServiceReply getAvailableProjectsByName(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
         MiteRequest miteRequest = createMiteRequestFromAttributes("projects.json", miteRequestAttributes);

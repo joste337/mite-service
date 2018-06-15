@@ -1,4 +1,4 @@
-package de.jos.service.mite.miteservice.model;
+package de.jos.service.mite.miteservice.responseModel;
 
 public class ProjectResponse {
     private Project project;

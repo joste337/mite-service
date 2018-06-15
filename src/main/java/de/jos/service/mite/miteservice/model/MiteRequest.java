@@ -1,6 +1,5 @@
 package de.jos.service.mite.miteservice.model;
 
-import de.jos.service.mite.miteservice.model.MiteRequestAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 

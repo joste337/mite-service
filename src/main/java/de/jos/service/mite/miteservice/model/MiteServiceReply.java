@@ -1,11 +1,15 @@
 package de.jos.service.mite.miteservice.model;
 
+import de.jos.service.mite.miteservice.responseModel.ProjectResponse;
+import de.jos.service.mite.miteservice.responseModel.ServiceResponse;
+
 import java.util.Arrays;
 
 public class MiteServiceReply {
     private boolean success;
     private ServiceResponse.Service[] services;
     private ProjectResponse.Project[] projects;
+    private MessageOption[] messageOption;
 
     public MiteServiceReply() {
     }
@@ -44,8 +48,21 @@ public class MiteServiceReply {
         this.projects = projects;
     }
 
+    public MessageOption[] getMessageOption() {
+        return messageOption;
+    }
+
+    public void setMessageOption(MessageOption[] messageOption) {
+        this.messageOption = messageOption;
+    }
+
     @Override
     public String toString() {
-        return "success: " + success + "\nservices: " + Arrays.toString(services) + "\nprojects: " + Arrays.toString(projects);
+        return "MiteServiceReply{" +
+                "success=" + success +
+                ", services=" + Arrays.toString(services) +
+                ", projects=" + Arrays.toString(projects) +
+                ", messageOption=" + Arrays.toString(messageOption) +
+                '}';
     }
 }

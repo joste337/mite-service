@@ -24,16 +24,12 @@ public class MiteServiceTest {
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
 
-    @Before
-    public void setUp() {
-        ReflectionTestUtils.setField(miteService, "miteBaseUrl", "http://localhost:" + wireMockRule.port() + "/");
-    }
 
     @Test
-    public void shouldReturnSuccessForNewEntry() {
-        MiteServiceReply miteServiceReply = miteService.createNewEntry(aMiteRequestAttribute());
+    public void pastEntriesTest() {
+        MiteServiceReply miteServiceReply = miteService.getPastEntries(aMiteRequestAttribute());
 
-        assertThat(miteServiceReply.isSuccess()).isTrue();
+        assertThat(miteServiceReply.getMessageOption().length).isGreaterThan(1);
     }
 
     private MiteRequestAttributes aMiteRequestAttribute() {

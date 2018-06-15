@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 public class URLUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(URLUtil.class);
@@ -14,12 +15,13 @@ public class URLUtil {
     private URLUtil() {
     }
 
-    public static String buildUrlFromMiteRequest(MiteRequest miteRequest, String miteHost) {
+    public static String buildUrlFromMiteRequest(MiteRequest miteRequest, String miteHost, String[]... additionalParams) {
         URIBuilder uriBuilder = new URIBuilder();
         uriBuilder.setHost(miteHost);
         uriBuilder.setScheme("https");
         uriBuilder.setPath(miteRequest.getPath());
         uriBuilder.setParameter("api_key", miteRequest.getApiKey());
+        Arrays.asList(additionalParams).forEach(param -> uriBuilder.setParameter(param[0], param[1]));
         miteRequest.getSearchParam().ifPresent(searchParam -> uriBuilder.setParameter("name", searchParam));
         try {
             return uriBuilder.build().toString();
