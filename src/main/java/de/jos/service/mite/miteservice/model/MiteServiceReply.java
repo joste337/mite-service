@@ -9,7 +9,7 @@ public class MiteServiceReply {
     private boolean success;
     private ServiceResponse.Service[] services;
     private ProjectResponse.Project[] projects;
-    private MessageOption[] messageOption;
+    private MessageOption[] messageOptions;
 
     public MiteServiceReply() {
     }
@@ -48,12 +48,12 @@ public class MiteServiceReply {
         this.projects = projects;
     }
 
-    public MessageOption[] getMessageOption() {
-        return messageOption;
+    public MessageOption[] getMessageOptions() {
+        return messageOptions;
     }
 
-    public void setMessageOption(MessageOption[] messageOption) {
-        this.messageOption = messageOption;
+    public void setMessageOptions(MessageOption[] messageOptions) {
+        this.messageOptions = messageOptions;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class MiteServiceReply {
                 "success=" + success +
                 ", services=" + Arrays.toString(services) +
                 ", projects=" + Arrays.toString(projects) +
-                ", messageOption=" + Arrays.toString(messageOption) +
+                ", messageOptions=" + Arrays.toString(messageOptions) +
                 '}';
     }
 }

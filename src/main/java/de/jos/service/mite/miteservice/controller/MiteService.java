@@ -33,8 +33,8 @@ public class MiteService {
         return entryManager.createNewEntry(miteRequest, entryManager.parseMiteRequestAttributesToMiteEntry(miteRequestAttributes));
     }
 
-    @GetMapping("/pastEntry")
-    public MiteServiceReply getPastEntries(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
+    @GetMapping("/deleteEntry")
+    public MiteServiceReply deleteEntry(@Validated @ModelAttribute MiteRequestAttributes miteRequestAttributes) {
         MiteRequest miteRequest = createMiteRequestFromAttributes("time_entries.json", miteRequestAttributes);
         LOGGER.info("Past entries request");
 

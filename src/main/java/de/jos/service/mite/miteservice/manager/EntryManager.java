@@ -23,16 +23,14 @@ public class EntryManager {
     }
 
     public MiteServiceReply getPastEntries(MiteRequest miteRequest) {
-        TimeEntriesResponse[] entries = miteClient.callMiteWithRequestAndResponseType(miteRequest, TimeEntriesResponse[].class, new String[] {"limit", "9"});
-        Object entriesObject = miteClient.callMiteWithRequestAndResponseType(miteRequest, Object.class, new String[] {"limit", "9"});
+        TimeEntriesResponse[] entries = miteClient.callMiteWithRequestAndResponseType(miteRequest, TimeEntriesResponse[].class, new String[] {"limit", "9"}, new String[] {"user_id", "current"});
 
         Arrays.asList(entries).forEach(entry -> System.out.println("mite reply: " + entry.getTime_entry().toReplyString()));
-        System.out.println("entries object: " + entriesObject);
 
         MiteServiceReply miteServiceReply = new MiteServiceReply(true);
         List<MessageOption> messageOptions = new ArrayList<>();
-        Arrays.asList(entries).forEach(timeEntry -> messageOptions.add(new MessageOption(timeEntry.getTime_entry().toReplyString(), "url with timeEntryId: " + timeEntry.getTime_entry().getId())));
-        miteServiceReply.setMessageOption(messageOptions.toArray(new MessageOption[messageOptions.size()]));
+        Arrays.asList(entries).forEach(timeEntry -> messageOptions.add(new MessageOption(timeEntry.getTime_entry().toReplyString(), "http://localhost:8600/deleteOption?miteRequestUrl=https://exozet.mite.yo.lk/time_entries/" + timeEntry.getTime_entry().getId() + ".json?api_key=" + miteRequest.getApiKey())));
+        miteServiceReply.setMessageOptions(messageOptions.toArray(new MessageOption[messageOptions.size()]));
 
 
         return miteServiceReply;

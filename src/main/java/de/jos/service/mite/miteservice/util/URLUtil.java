@@ -21,7 +21,10 @@ public class URLUtil {
         uriBuilder.setScheme("https");
         uriBuilder.setPath(miteRequest.getPath());
         uriBuilder.setParameter("api_key", miteRequest.getApiKey());
-        Arrays.asList(additionalParams).forEach(param -> uriBuilder.setParameter(param[0], param[1]));
+        Arrays.asList(additionalParams).forEach(param -> {
+            System.out.println("param: " + param);
+            uriBuilder.setParameter(param[0], param[1]);
+        });
         miteRequest.getSearchParam().ifPresent(searchParam -> uriBuilder.setParameter("name", searchParam));
         try {
             return uriBuilder.build().toString();

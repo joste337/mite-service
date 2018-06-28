@@ -26,8 +26,14 @@ public class MiteClient {
         restTemplate = restTemplateBuilder.build();
     }
 
-    public <T> T callMiteWithRequestAndResponseType(MiteRequest miteRequest, Class<T> responseType, String... parameters) {
-        String url = buildUrlFromMiteRequest(miteRequest, miteHost, parameters);
+    public <T> T callMiteWithRequestAndResponseType(MiteRequest miteRequest, Class<T> responseType, String[]... parameters) {
+        String url;
+        if (parameters.length == 0) {
+            url = buildUrlFromMiteRequest(miteRequest, miteHost);
+        } else {
+            url = buildUrlFromMiteRequest(miteRequest, miteHost, parameters);
+        }
+        LOGGER.info("Calling mite with urL: {}", url);
         return restTemplate.getForObject(url, responseType);
     }
 
